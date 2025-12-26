@@ -1,0 +1,43 @@
+{
+  "round": 0,
+  "dealer": 0,
+  "current": 0,
+  "wall": 70,
+  "honba": 0,
+  "reach_sticks": 0,
+  "bonus": [],
+  "players": [
+    {
+      "name": "玩家",
+      "score": 250,
+      "hand": [],
+      "discards": [],
+      "melds": [],
+      "reach": false
+    },
+    {
+      "name": "AI东",
+      "score": 250,
+      "hand": [],
+      "discards": [],
+      "melds": [],
+      "reach": false
+    },
+    {
+      "name": "AI南",
+      "score": 250,
+      "hand": [],
+      "discards": [],
+      "melds": [],
+      "reach": false
+    },
+    {
+      "name": "AI西",
+      "score": 250,
+      "hand": [],
+      "discards": [],
+      "melds": [],
+      "reach": false
+    }
+  ]
+}

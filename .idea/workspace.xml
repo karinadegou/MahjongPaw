@@ -4,22 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="60f93b40-db35-4048-9480-69d5f3362cc4" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/MahjongPaw.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/create_project.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world_model/entities/mahjong_meld.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world_model/entities/mahjong_player.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world_model/entities/mahjong_table.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world_model/entities/mahjong_tile.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/日麻Agent架构.md" afterDir="false" />
+    <list default="true" id="60f93b40-db35-4048-9480-69d5f3362cc4" name="更改" comment="CLI Mahjong era">
+      <change afterPath="$PROJECT_DIR$/mahjong_config_renderer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/world_model/entities/mahjong_meld.py" beforeDir="false" afterPath="$PROJECT_DIR$/world_model/entities/mahjong_meld.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/world_model/entities/mahjong_player.py" beforeDir="false" afterPath="$PROJECT_DIR$/world_model/entities/mahjong_player.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/world_model/entities/mahjong_table.py" beforeDir="false" afterPath="$PROJECT_DIR$/world_model/entities/mahjong_table.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/world_model/entities/mahjong_tile.py" beforeDir="false" afterPath="$PROJECT_DIR$/world_model/entities/mahjong_tile.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,15 +30,17 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Python.create_project.executor": "Run",
-    "Python.main.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "D:/Works/code/Python/MahjongPaw/world_model/entities"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Python.create_project.executor&quot;: &quot;Run&quot;,
+    &quot;Python.mahjong_config_renderer.executor&quot;: &quot;Run&quot;,
+    &quot;Python.mahjong_tile.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;D:/Works/code/Python/MahjongPaw/world_model/entities&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Works\code\Python\MahjongPaw\world_model\entities" />
@@ -95,6 +89,37 @@
       <option name="presentableId" value="Default" />
       <updated>1766157548186</updated>
     </task>
+    <task id="LOCAL-00001" summary="CLI Mahjong era">
+      <option name="closed" value="true" />
+      <created>1766575167053</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1766575167053</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="TEXT_FILTER_SETTINGS">
+                <TextFilterSettings>
+                  <option name="MATCH_CASE" value="true" />
+                  <option name="REGEX" value="true" />
+                </TextFilterSettings>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="CLI Mahjong era" />
+    <option name="LAST_COMMIT_MESSAGE" value="CLI Mahjong era" />
   </component>
 </project>
