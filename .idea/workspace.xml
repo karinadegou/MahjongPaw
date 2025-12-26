@@ -4,31 +4,35 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="60f93b40-db35-4048-9480-69d5f3362cc4" name="更改" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/MahjongPaw.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/create_project.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/img.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world_model/entities/mahjong_meld.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world_model/entities/mahjong_player.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world_model/entities/mahjong_table.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/world_model/entities/mahjong_tile.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/日麻Agent架构.md" afterDir="false" />
-    </list>
+    <list default="true" id="60f93b40-db35-4048-9480-69d5f3362cc4" name="更改" comment="CLI Mahjong era" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;karinadegou&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/karinadegou/MahjongPaw.git&quot;,
+    &quot;accountId&quot;: &quot;2bd0a237-3e7f-419e-9401-31c800a6288a&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 3
 }</component>
@@ -40,8 +44,14 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Python.analyzer.executor": "Run",
+    "Python.api.executor": "Run",
+    "Python.cal_scores.executor": "Run",
     "Python.create_project.executor": "Run",
+    "Python.mahjong_config_renderer.executor": "Run",
+    "Python.mahjong_tile.executor": "Run",
     "Python.main.executor": "Run",
+    "Python.test.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "master",
     "last_opened_file_path": "D:/Works/code/Python/MahjongPaw/world_model/entities"
@@ -56,7 +66,7 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+    <configuration name="analyzer" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="MahjongPaw" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -69,7 +79,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="SCRIPT_NAME" value="D:\Works\code\Python\MahjongPaw\analyzer.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -95,6 +105,96 @@
       <option name="presentableId" value="Default" />
       <updated>1766157548186</updated>
     </task>
+    <task id="LOCAL-00001" summary="CLI Mahjong era">
+      <option name="closed" value="true" />
+      <created>1766575167053</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1766575167053</updated>
+    </task>
+    <task id="LOCAL-00002" summary="CLI Mahjong era">
+      <option name="closed" value="true" />
+      <created>1766761117318</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1766761117318</updated>
+    </task>
+    <task id="LOCAL-00003" summary="CLI Mahjong era">
+      <option name="closed" value="true" />
+      <created>1766761127098</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1766761127098</updated>
+    </task>
+    <task id="LOCAL-00004" summary="CLI Mahjong era">
+      <option name="closed" value="true" />
+      <created>1766761134157</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1766761134157</updated>
+    </task>
+    <task id="LOCAL-00005" summary="CLI Mahjong era">
+      <option name="closed" value="true" />
+      <created>1766851833358</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1766851833358</updated>
+    </task>
+    <task id="LOCAL-00006" summary="CLI Mahjong era">
+      <option name="closed" value="true" />
+      <created>1766932229735</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1766932229735</updated>
+    </task>
+    <task id="LOCAL-00007" summary="CLI Mahjong era">
+      <option name="closed" value="true" />
+      <created>1766932311871</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1766932311871</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="TEXT_FILTER_SETTINGS">
+                <TextFilterSettings>
+                  <option name="MATCH_CASE" value="true" />
+                  <option name="REGEX" value="true" />
+                </TextFilterSettings>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="CLI Mahjong era" />
+    <option name="LAST_COMMIT_MESSAGE" value="CLI Mahjong era" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/analyzer.py</url>
+          <line>671</line>
+          <option name="timeStamp" value="10" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
