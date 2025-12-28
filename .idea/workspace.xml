@@ -4,7 +4,56 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="60f93b40-db35-4048-9480-69d5f3362cc4" name="更改" comment="CLI Mahjong era" />
+    <list default="true" id="60f93b40-db35-4048-9480-69d5f3362cc4" name="更改" comment="CLI Mahjong era">
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/analyzer.py" beforeDir="false" afterPath="$PROJECT_DIR$/analyzer.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/global_config.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/llm_prompt.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/yolo_config.yaml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/decision/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/decision/hand_strategy/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/decision/hand_strategy/hand_recommend.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/decision/hand_strategy/operation_guide.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/decision/hand_strategy/probability_tree.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/decision/point_calculator/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/decision/point_calculator/fan_fu_calc.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/decision/point_calculator/point_calc.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/decision/point_calculator/state_machine.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/decision/strategy_optimize.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/execution/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/execution/llm_client/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/execution/llm_client/base_llm.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/execution/llm_client/openai_llm.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/execution/prompt_engineering.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/output.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/perception/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/perception/cv_module/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/perception/cv_module/manual_correction.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/perception/cv_module/screen_capture.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/perception/cv_module/utils.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/perception/cv_module/yolo_detector.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/perception/data_input.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_decision.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_execution.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_perception.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tests/test_world_model.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/data_utils.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/log_utils.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/utils/ui_utils.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/world_model/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/world_model/entities/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/world_model/entities/mahjong_meld.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/world_model/entities/mahjong_player.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/world_model/entities/mahjong_table.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/world_model/entities/mahjong_tile.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/world_model/game_frame.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/world_model/status_manager.py" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -53,8 +102,9 @@
     "Python.main.executor": "Run",
     "Python.test.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "D:/Works/code/Python/MahjongPaw/world_model/entities"
+    "git-widget-placeholder": "world",
+    "last_opened_file_path": "D:/Works/code/Python/MahjongPaw",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
   }
 }]]></component>
   <component name="RecentsManager">
@@ -66,7 +116,7 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="analyzer" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python">
       <module name="MahjongPaw" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -79,7 +129,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="D:\Works\code\Python\MahjongPaw\analyzer.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -183,6 +233,9 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/Mahjong_YOLO" />
+    </ignored-roots>
     <MESSAGE value="CLI Mahjong era" />
     <option name="LAST_COMMIT_MESSAGE" value="CLI Mahjong era" />
   </component>

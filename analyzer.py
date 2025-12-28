@@ -665,70 +665,54 @@ def test_analyzer():
         )
 
 
-def main():
-    """主函数"""
+def run_analysis_to_file(output_path: str = "output.txt") -> str:
+    """
+    一键从当前截图识别到牌谱分析，并将分析结果写入文本文件。
+    - 调用 YOLO 识别当前截图 (`Mahjong_YOLO/test.png`)，得到 hand_str
+    - 使用 FixedMahjongAnalyzer 进行分析
+    - 将所有 print 输出重定向写入 output_path
+
+    返回:
+        hand_str: 识别出的手牌字符串
+    """
     analyzer = FixedMahjongAnalyzer()
 
-    print("收到你的截图了，雀宝正在努力分析ing。。。")
-    # print("欢迎使用麻将手牌分析工具！")
-    # print("请选择分析模式：")
-    # print("1. 运行示例测试")
-    # print("2. 自定义分析")
+    # 1. 从 YOLO 识别得到手牌字符串
+    _, hand_str = perceive()
 
-    # choice = input("请输入选择 (1/2): ").strip()
+    # 暂时用默认参数，后面需要可以从 GUI 传入
+    dora_indicators = None
+    melds = None
+    player_wind = 0
+    round_wind = 0
+    is_riichi = False
 
-    choice = "2"
-
-    if choice == "1":
-        test_analyzer()
-
-    elif choice == "2":
-        # print("\n请输入手牌信息：")
-
-        _, hand_str = perceive()
-
-        # dora_input = input("宝牌指示牌 (用空格分隔，如 5m 3z，直接回车跳过): ").strip()
-        dora_input = ""
-        dora_indicators = dora_input.split() if dora_input else None
-
-        # melds_input = input("副露 (用空格分隔，如 123m 555p，直接回车跳过): ").strip()
-        melds_input = ""
-        melds = melds_input.split() if melds_input else None
-
-        # player_wind = input("自风 (0=东, 1=南, 2=西, 3=北，默认0): ").strip()
-        player_wind = ""
-        player_wind = int(player_wind) if player_wind else 0
-
-        # round_wind = input("场风 (0=东, 1=南, 2=西, 3=北，默认0): ").strip()
-        round_wind = ""
-        round_wind = int(round_wind) if round_wind else 0
-
-        # riichi_input = input("是否立直 (y/n，默认n): ").strip().lower()
-        riichi_input = ""
-        is_riichi = riichi_input == 'y'
-
-        print("\n")
-
-        # 重定向到文件
-        f = open('output.txt', 'w', encoding='utf-8')
-        sys.stdout = f  # 重定向到文件
-
+    # 重定向 stdout 到文件，写入分析报告
+    f = open(output_path, "w", encoding="utf-8")
+    sys.stdout = f
+    try:
         analyzer.analyze(
             hand_str=hand_str,
             dora_indicators=dora_indicators,
             melds=melds,
             player_wind=player_wind,
             round_wind=round_wind,
-            is_riichi=is_riichi
+            is_riichi=is_riichi,
         )
-
+    finally:
         f.close()
-        sys.stdout = original_stdout  # 恢复标准输出
+        sys.stdout = original_stdout
 
-        import api
+    return hand_str
 
-    else:
-        print("无效选择")
 
-# if __name__ == "__main__":
-main()
+def main():
+    """简单命令行入口：仅运行一次分析并写入 output.txt。"""
+    print("收到你的截图了，雀宝正在努力分析ing……")
+    hand_str = run_analysis_to_file("output.txt")
+    print(f"识别到的手牌: {hand_str}")
+    print("分析报告已写入 output.txt")
+
+
+if __name__ == "__main__":
+    main()
