@@ -223,6 +223,20 @@ def test_hotkey():
     # print("热键已注册，开始测试...")
     keyboard.wait()
 
+        elif choice == "2":
+            # 显示游戏规则
+            ui.show_game_rules()
+
+        elif choice == "3":
+            # 退出游戏
+            print("\n感谢游戏，再见!")
+            sys.exit(0)
+
+        else:
+            print("无效选择，请重新输入!")
+
+from mahjong.hand_calculating.hand import HandCalculator
+from mahjong.tile import TilesConverter
 
 if __name__ == "__main__":
     import sys
