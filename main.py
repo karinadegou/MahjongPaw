@@ -1,584 +1,227 @@
-# -*- coding: utf-8 -*-
-"""
-麻将游戏启动模块
-"""
-import sys
-import random
-from typing import List, Dict, Optional, Tuple
-from enum import Enum
-
-# 导入现有的模块
-from world_model.entities.mahjong_tile import MahjongTile, MahjongTileSet, Tile
-from world_model.entities.mahjong_meld import Meld
-from world_model.entities.mahjong_player import Player
-from world_model.entities.mahjong_table import GameTable
+# screenshot_service_ctrl_alt_s.py
+import keyboard
+import os
+import datetime
+from PIL import ImageGrab
+from pathlib import Path
+import time
 
 
-class GamePhase(Enum):
-    """游戏阶段"""
-    PREPARE = "prepare"  # 准备阶段
-    DRAW = "draw"  # 摸牌阶段
-    DISCARD = "discard"  # 打牌阶段
-    ACTION = "action"  # 行动阶段（碰杠吃）
-    RIICHI = "riichi"  # 立直阶段
-    WIN = "win"  # 和牌阶段
-    END = "end"  # 结束阶段
-
-
-class ActionType(Enum):
-    """玩家动作类型"""
-    DRAW = "draw"  # 摸牌
-    DISCARD = "discard"  # 打牌
-    PON = "pon"  # 碰
-    CHI = "chi"  # 吃
-    KAN = "kan"  # 杠
-    RIICHI = "riichi"  # 立直
-    TSUMO = "tsumo"  # 自摸
-    RON = "ron"  # 荣和
-    PASS = "pass"  # 过
-    SKIP = "skip"  # 跳过
-
-
-class GameController:
-    """
-    游戏控制器
-    负责管理游戏流程和玩家交互
-    """
-
-    def __init__(self, player_names: List[str] = None):
+class ScreenshotService:
+    def __init__(self, save_dir='./Mahjong_YOLO', filename="test.png"):
         """
-        初始化游戏控制器
-
-        参数:
-        ----------
-        player_names : List[str], 可选
-            玩家名称列表，默认为["玩家", "AI东", "AI南", "AI西"]
+        后台截图服务
+        默认热键：Ctrl+Alt+S
         """
-        if player_names is None:
-            player_names = ["玩家", "AI东", "AI南", "AI西"]
+        self.save_dir = Path(save_dir)
+        self.filename = filename
+        self.hotkey = "ctrl+alt+s"  # 修改为 Ctrl+Alt+S
+        self.running = False
 
-        if len(player_names) != 4:
-            raise ValueError("麻将游戏需要4名玩家")
+    def setup_save_dir(self):
+        """设置保存目录"""
+        self.save_dir.mkdir(parents=True, exist_ok=True)
+        # print(f"📁 截图将保存到: {self.save_dir}")
 
-        # 初始化玩家
-        self.players = []
-        for i, name in enumerate(player_names):
-            player = Player(seat=i, dealer_seat=0)
-            player.name = name
-            self.players.append(player)
+    def capture_and_save(self):
+        """截图并保存，如果文件已存在则覆盖"""
+        try:
+            # 构建完整文件路径
+            filepath = self.save_dir / self.filename
 
-        # 创建游戏桌
-        self.game_table = GameTable(self.players)
+            # print(f"📸 检测到热键 {self.hotkey}，开始截图...")
 
-        # 设置玩家与游戏桌的关联
-        for player in self.players:
-            player.game_table = self.game_table
+            # 稍微延迟，确保热键释放
+            time.sleep(0.1)
 
-        # 游戏状态
-        self.current_phase = GamePhase.PREPARE
-        self.current_player = 0  # 当前行动玩家
-        self.last_action = None  # 上一个动作
-        self.pending_actions = {}  # 待处理的玩家动作
-        self.game_over = False
+            # 截图
+            screenshot = ImageGrab.grab()
 
-        # AI玩家标记
-        self.ai_players = [i for i, player in enumerate(self.players) if "AI" in player.name]
+            # 检查文件是否存在
+            if filepath.exists():
+                # print(f"⚠️  文件已存在，删除旧文件: {filepath.name}")
+                try:
+                    os.remove(filepath)
+                    # 等待文件系统确认删除
+                    time.sleep(0.05)
+                except Exception as e:
+                    # print(f"❌ 删除旧文件失败: {e}")
+                    # 尝试重命名旧文件
+                    timestamp = datetime.datetime.now().strftime("%H%M%S")
+                    backup_name = f"old_{timestamp}_{self.filename}"
+                    backup_path = self.save_dir / backup_name
+                    try:
+                        os.rename(filepath, backup_path)
+                        # print(f"📂 已将旧文件重命名为: {backup_name}")
+                    except Exception as e2:
+                        # print(f"❌ 重命名也失败: {e2}")
+                        return None
 
-        print("=" * 60)
-        print("麻将游戏初始化完成")
-        print(f"玩家列表: {[p.name for p in self.players]}")
-        print(f"庄家: {self.players[self.game_table.dealer_seat].name}")
-        print("=" * 60)
+            # 保存新截图
+            screenshot.save(filepath, "PNG")
 
-    def start_game(self):
-        """开始游戏"""
-        print("\n🎮 开始新游戏 🎮")
+            # 验证文件是否保存成功
+            if filepath.exists():
+                file_size = filepath.stat().st_size
+                # print(f"✅ 截图已保存: {filepath}")
+                # print(f"   文件大小: {file_size:,} 字节")
+                # print(f"   时间: {datetime.datetime.now().strftime('%H:%M:%S')}")
+                import analyzer
+                return str(filepath)
+            else:
+                # print(f"❌ 文件保存失败，文件不存在")
+                return None
 
-        # 初始化回合
-        self.game_table.init_round()
-
-        # 发手牌
-        self._deal_hands()
-
-        # 设置游戏阶段
-        self.current_phase = GamePhase.DRAW
-        self.current_player = self.game_table.dealer_seat
-
-        # 显示初始状态
-        self._display_game_state()
-
-        # 开始游戏主循环
-        self._game_loop()
-
-    def _deal_hands(self):
-        """发手牌"""
-        print("\n🃏 发手牌 🃏")
-
-        # 标准麻将发牌流程：每人13张，庄家14张
-        # 每次发4张，发3轮，共12张
-        for _ in range(3):
-            for player in self.players:
-                # 每人摸4张
-                for _ in range(4):
-                    if self.game_table.wall:
-                        tile = self.game_table.wall.pop(0)
-                        player.hand.append(tile)
-
-        # 第4轮：庄家摸2张，其他玩家摸1张
-        for i, player in enumerate(self.players):
-            draw_count = 2 if i == self.game_table.dealer_seat else 1
-            for _ in range(draw_count):
-                if self.game_table.wall:
-                    tile = self.game_table.wall.pop(0)
-                    player.hand.append(tile)
-
-        # 整理手牌
-        for player in self.players:
-            self._sort_hand(player)
-
-        print("手牌发放完成")
-
-    def _sort_hand(self, player: Player):
-        """整理玩家手牌"""
-        # 按136编码排序，这样同种牌会在一起
-        player.hand.sort(key=lambda tile: tile.id)
-
-    def _game_loop(self):
-        """游戏主循环"""
-        while not self.game_over and self.game_table.end == 0:
-            # 处理当前玩家的回合
-            self._process_player_turn()
-
-            # 检查游戏结束条件
-            if self.game_table.end != 0:
-                self.game_over = True
-                break
-
-            # 切换到下一个玩家
-            self._next_player()
-
-        # 游戏结束
-        self._end_game()
-
-    def _process_player_turn(self):
-        """处理玩家回合"""
-        player = self.players[self.current_player]
-
-        print(f"\n{'=' * 50}")
-        print(f"回合 {self.game_table.turn}: {player.name} 的回合")
-        print(f"{'=' * 50}")
-
-        # 1. 摸牌阶段
-        if self.current_phase == GamePhase.DRAW:
-            self._draw_phase(player)
-
-        # 2. 打牌阶段
-        elif self.current_phase == GamePhase.DISCARD:
-            self._discard_phase(player)
-
-        # 3. 检查其他玩家是否可以行动（碰杠吃）
-        if self.last_action == ActionType.DISCARD:
-            self._check_player_actions(player)
-
-        # 4. 更新回合计数
-        self.game_table.init_turn()
-
-    def _draw_phase(self, player: Player):
-        """摸牌阶段"""
-        if not self.game_table.wall:
-            print("牌山已空，游戏结束")
-            self.game_table.end = 2  # 流局结束
-            return
-
-        # 摸一张牌
-        tile = self.game_table.wall.pop(0)
-        player.hand.append(tile)
-        self._sort_hand(player)
-
-        print(f"{player.name} 摸牌: {tile}")
-
-        # 记录动作
-        self.last_action = ActionType.DRAW
-
-        # 切换到打牌阶段
-        self.current_phase = GamePhase.DISCARD
-
-    def _discard_phase(self, player: Player):
-        """打牌阶段"""
-        # 获取玩家要打出的牌
-        discard_tile = self._get_discard_tile(player)
-
-        if discard_tile:
-            # 从手牌中移除
-            player.hand.remove(discard_tile)
-
-            # 添加到牌河
-            player.river.append(discard_tile)
-            self.game_table.river[player.seat].append(discard_tile)
-
-            # 记录当前牌河（用于其他玩家行动判断）
-            self.game_table.cur_river.append({
-                'tile': discard_tile,
-                'player': player.seat,
-                'turn': self.game_table.turn
-            })
-
-            print(f"{player.name} 打牌: {discard_tile}")
-
-            # 记录动作
-            self.last_action = ActionType.DISCARD
-            self.last_discard = discard_tile
-            self.last_discard_player = player.seat
-
-            # 重置阶段
-            self.current_phase = GamePhase.DRAW
-        else:
-            print(f"{player.name} 无法打牌，手牌为空")
-
-    def _get_discard_tile(self, player: Player) -> Optional[MahjongTile]:
-        """获取玩家要打出的牌（AI或人类）"""
-        if not player.hand:
+        except Exception as e:
+            # print(f"❌ 截图失败: {e}")
             return None
 
-        # AI玩家：使用简单策略
-        if player.seat in self.ai_players:
-            return self._ai_choose_discard(player)
+    def capture_and_save_robust(self):
+        """
+        更健壮的截图保存，支持多种重试策略
+        """
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                # print(f"尝试截图 (第 {attempt + 1} 次)...")
+                result = self.capture_and_save()
+                if result:
+                    return result
+                elif attempt < max_retries - 1:
+                    # print("等待重试...")
+                    time.sleep(0.5)
+            except Exception as e:
+                # print(f"第 {attempt + 1} 次尝试失败: {e}")
+                if attempt < max_retries - 1:
+                    time.sleep(0.5)
 
-        # 人类玩家：模拟选择（实际中应该通过UI选择）
-        else:
-            return self._human_choose_discard(player)
-
-    def _ai_choose_discard(self, player: Player) -> MahjongTile:
-        """AI选择打出的牌（简单策略）"""
-        # 简单策略：优先打出孤立的字牌，然后打出边张
-        hand = player.hand
-
-        # 检查是否有字牌
-        honor_tiles = [tile for tile in hand if tile.id // 4 >= 27]
-        if honor_tiles:
-            # 选择第一张字牌
-            return honor_tiles[0]
-
-        # 没有字牌，选择数字牌
-        # 优先打出边张（1或9）
-        terminal_tiles = []
-        for tile in hand:
-            tile_34 = tile.id // 4
-            if tile_34 < 27:  # 数字牌
-                number = (tile_34 % 9) + 1
-                if number in [1, 9]:
-                    terminal_tiles.append(tile)
-
-        if terminal_tiles:
-            return terminal_tiles[0]
-
-        # 否则随机选择一张
-        return random.choice(hand)
-
-    def _human_choose_discard(self, player: Player) -> MahjongTile:
-        """人类玩家选择打出的牌（模拟）"""
-        # 显示手牌
-        print(f"\n你的手牌 ({len(player.hand)}张):")
-        for i, tile in enumerate(player.hand):
-            print(f"  [{i}] {tile}")
-
-        # 模拟选择：随机选择一张
-        # 在实际游戏中，这里应该等待玩家输入
-        if player.hand:
-            # 简单策略：选择第一张非字牌，如果没有则选择第一张
-            non_honor_tiles = [t for t in player.hand if t.id // 4 < 27]
-            if non_honor_tiles:
-                return non_honor_tiles[0]
-            else:
-                return player.hand[0]
-
+        # print(f"❌ 经过 {max_retries} 次尝试后截图失败")
         return None
 
-    def _check_player_actions(self, discard_player: Player):
-        """检查其他玩家是否可以行动（碰杠吃）"""
-        discard_tile = self.last_discard
-        from_seat = self.last_discard_player
+    def start(self):
+        """启动服务"""
+        self.setup_save_dir()
 
-        print(f"\n检查其他玩家对 {discard_tile} 的行动:")
+        # print(f"🎯 截图服务已启动")
+        # print(f"   热键: {self.hotkey}")
+        # print(f"   保存到: {self.save_dir / self.filename}")
+        # print(f"   按 Ctrl+C 停止服务")
+        # print("-" * 50)
 
-        # 收集可能的动作
-        possible_actions = {}
+        self.running = True
 
-        for player in self.players:
-            if player.seat == from_seat:
-                continue
+        # 注册热键 Ctrl+Alt+S
+        # keyboard.add_hotkey(self.hotkey, self.capture_and_save_robust)
 
-            # 检查是否可以碰
-            if self._can_pon(player, discard_tile):
-                possible_actions[player.seat] = {
-                    'type': ActionType.PON,
-                    'player': player,
-                    'tile': discard_tile
-                }
+        keyboard.add_hotkey(self.hotkey, self.capture_and_save)
 
-            # 检查是否可以杠（大明杠）
-            if self._can_kan(player, discard_tile):
-                possible_actions[player.seat] = {
-                    'type': ActionType.KAN,
-                    'player': player,
-                    'tile': discard_tile
-                }
+        # 可选：注册其他备用热键
+        # keyboard.add_hotkey("ctrl+shift+s", self.capture_and_save_robust)
+        # keyboard.add_hotkey("f12", self.capture_and_save_robust)
 
-            # 检查是否可以吃（只有下家可以）
-            if self._can_chi(player, discard_tile, from_seat):
-                possible_actions[player.seat] = {
-                    'type': ActionType.CHI,
-                    'player': player,
-                    'tile': discard_tile
-                }
+        # 显示所有注册的热键
+        # print(f"已注册热键: {self.hotkey}")
+        # print("现在可以按 Ctrl+Alt+S 截图了")
 
-        # 如果有动作，处理之
-        if possible_actions:
-            self._resolve_actions(possible_actions)
+        # 保持运行
+        try:
+            keyboard.wait()  # 等待用户按键
+        except KeyboardInterrupt:
+            self.stop()
+        except Exception as e:
+            # print(f"服务异常: {e}")
+            self.stop()
 
-    def _can_pon(self, player: Player, tile: MahjongTile) -> bool:
-        """检查是否可以碰"""
-        # 检查手牌中是否有2张相同的牌
-        same_tiles = [t for t in player.hand if t.id // 4 == tile.id // 4]
-        return len(same_tiles) >= 2
+    def stop(self):
+        """停止服务"""
+        self.running = False
+        keyboard.unhook_all_hotkeys()
+        # print("\n🛑 截图服务已停止")
 
-    def _can_kan(self, player: Player, tile: MahjongTile) -> bool:
-        """检查是否可以杠（大明杠）"""
-        # 检查手牌中是否有3张相同的牌
-        same_tiles = [t for t in player.hand if t.id // 4 == tile.id // 4]
-        return len(same_tiles) >= 3
-
-    def _can_chi(self, player: Player, tile: MahjongTile, from_seat: int) -> bool:
-        """检查是否可以吃"""
-        # 只有下家可以吃
-        if (player.seat - from_seat) % 4 != 1:
-            return False
-
-        # 字牌不能吃
-        if tile.id // 4 >= 27:
-            return False
-
-        # 这里简化处理，实际应该检查是否可以组成顺子
-        return True
-
-    def _resolve_actions(self, actions: Dict):
-        """解析并执行动作"""
-        # 按优先级排序：杠 > 碰 > 吃
-        action_list = list(actions.values())
-
-        # 简单选择：选择第一个动作
-        if action_list:
-            action = action_list[0]
-            player = action['player']
-            tile = action['tile']
-
-            print(f"{player.name} {action['type'].value} {tile}!")
-
-            # 执行动作
-            if action['type'] == ActionType.PON:
-                self._execute_pon(player, tile, self.last_discard_player)
-            elif action['type'] == ActionType.KAN:
-                self._execute_kan(player, tile, self.last_discard_player)
-            elif action['type'] == ActionType.CHI:
-                self._execute_chi(player, tile, self.last_discard_player)
-
-    def _execute_pon(self, player: Player, tile: MahjongTile, from_seat: int):
-        """执行碰牌"""
-        # 从手牌中找出两张相同的牌
-        same_tiles = [t for t in player.hand if t.id // 4 == tile.id // 4][:2]
-
-        # 创建副露
-        meld_tiles = same_tiles + [tile]
-        meld = Meld(
-            type=Meld.PON,
-            tiles=meld_tiles,
-            open=True,
-            called=tile.id,
-            from_whom=from_seat,
-            by_whom=player.seat
-        )
-
-        # 添加到玩家副露
-        player.meld.append(meld)
-        self.game_table.meld[player.seat].append(meld)
-
-        # 从手牌中移除两张牌
-        for t in same_tiles:
-            player.hand.remove(t)
-
-        # 碰牌后，该玩家成为当前玩家
-        self.current_player = player.seat
-        self.current_phase = GamePhase.DISCARD
-
-        print(f"{player.name} 碰了 {tile}!")
-
-    def _execute_kan(self, player: Player, tile: MahjongTile, from_seat: int):
-        """执行杠牌（大明杠）"""
-        # 从手牌中找出三张相同的牌
-        same_tiles = [t for t in player.hand if t.id // 4 == tile.id // 4][:3]
-
-        # 创建副露
-        meld_tiles = same_tiles + [tile]
-        meld = Meld(
-            type=Meld.KAN,
-            tiles=meld_tiles,
-            open=True,
-            called=tile.id,
-            from_whom=from_seat,
-            by_whom=player.seat
-        )
-
-        # 添加到玩家副露
-        player.meld.append(meld)
-        self.game_table.meld[player.seat].append(meld)
-
-        # 从手牌中移除三张牌
-        for t in same_tiles:
-            player.hand.remove(t)
-
-        # 杠牌后，从岭上摸一张牌
-        if self.game_table.dead_wall:
-            bonus_tile = self.game_table.dead_wall.pop(0)
-            player.hand.append(bonus_tile)
-            self._sort_hand(player)
-            print(f"{player.name} 从岭上摸牌: {bonus_tile}")
-
-        # 杠牌后，该玩家成为当前玩家
-        self.current_player = player.seat
-        self.current_phase = GamePhase.DISCARD
-
-        print(f"{player.name} 杠了 {tile}!")
-
-    def _execute_chi(self, player: Player, tile: MahjongTile, from_seat: int):
-        """执行吃牌"""
-        # 简化处理：假设可以吃
-        print(f"{player.name} 吃 {tile} (简化处理)")
-
-        # 吃牌后，该玩家成为当前玩家
-        self.current_player = player.seat
-        self.current_phase = GamePhase.DISCARD
-
-    def _next_player(self):
-        """切换到下一个玩家"""
-        self.current_player = (self.current_player + 1) % 4
-
-    def _display_game_state(self):
-        """显示游戏状态"""
-        print("\n" + "=" * 60)
-        print("当前游戏状态:")
-        print("=" * 60)
-
-        # 显示牌山信息
-        print(f"牌山剩余: {len(self.game_table.wall)}张")
-        print(f"岭上剩余: {len(self.game_table.dead_wall)}张")
-        print(f"宝牌指示牌: {[Tile.t136_to_g(t.id) for t in self.game_table.dora_indicators]}")
-
-        # 显示立直棒
-        print(f"立直棒: {self.game_table.riichi_sticks}本")
-
-        # 显示玩家状态
-        print("\n玩家状态:")
-        for player in self.players:
-            hand_display = Tile.t136_to_g([t.id for t in player.hand]) if player.hand else "空"
-            discard_display = Tile.t136_to_g([t.id for t in player.river[-5:]]) if player.river else "空"
-
-            status = []
-            if player.seat == self.current_player:
-                status.append("当前回合")
-            if player.seat == self.game_table.dealer_seat:
-                status.append("庄家")
-            if player.riichi >= 0:
-                status.append("立直")
-
-            status_str = "(" + ", ".join(status) + ")" if status else ""
-
-            print(f"  {player.name}: 手牌{len(player.hand)}张 {hand_display}")
-            print(f"        牌河{len(player.river)}张 {discard_display} {status_str}")
-
-        print("=" * 60)
-
-    def _end_game(self):
-        """结束游戏"""
-        print("\n" + "=" * 60)
-        print("游戏结束!")
-        print("=" * 60)
-
-        if self.game_table.end == 1:
-            print("和牌结束!")
-            if self.game_table.winner:
-                winners = [self.players[i].name for i in self.game_table.winner]
-                print(f"和牌者: {', '.join(winners)}")
-        elif self.game_table.end == 2:
-            print("流局结束!")
-
-        # 显示最终得分
-        print("\n最终得分:")
-        for player in self.players:
-            print(f"  {player.name}: {player.score}点")
-
-        print("\n感谢游戏！")
+    def change_hotkey(self, new_hotkey):
+        """更改热键"""
+        keyboard.unhook_all_hotkeys()
+        self.hotkey = new_hotkey
+        keyboard.add_hotkey(self.hotkey, self.capture_and_save)
+        # print(f"🔄 热键已更改为: {new_hotkey}")
 
 
-class SimpleGameUI:
-    """
-    简单的游戏UI（命令行界面）
-    """
+# ==================== 简化版（单文件使用） ====================
 
-    @staticmethod
-    def show_main_menu():
-        """显示主菜单"""
-        print("\n" + "=" * 60)
-        print("          日本麻将游戏")
-        print("=" * 60)
-        print("1. 开始新游戏")
-        print("2. 游戏规则")
-        print("3. 退出游戏")
-        print("=" * 60)
+class QuickScreenshot:
+    """快速截图类，单文件使用"""
 
-        choice = input("请选择 (1-3): ")
-        return choice
+    def __init__(self, save_path="./Mahjong_YOLO/test.png"):
+        self.save_path = Path(save_path)
+        self.save_path.parent.mkdir(parents=True, exist_ok=True)
 
-    @staticmethod
-    def show_game_rules():
-        """显示游戏规则"""
-        print("\n" + "=" * 60)
-        print("游戏规则说明:")
-        print("=" * 60)
-        print("1. 游戏人数: 4人")
-        print("2. 牌种: 136张标准麻将牌")
-        print("3. 目标: 通过吃、碰、杠组成特定的牌型")
-        print("4. 特殊规则:")
-        print("   - 立直: 宣布听牌，之后不能换牌")
-        print("   - 宝牌: 增加番数")
-        print("   - 流局: 牌山摸完无人和牌")
-        print("=" * 60)
-        input("按回车键返回主菜单...")
+    def capture(self):
+        """截图并覆盖保存"""
+        try:
+            # 删除已存在文件
+            if self.save_path.exists():
+                os.remove(self.save_path)
+
+            # 截图并保存
+            ImageGrab.grab().save(self.save_path, "PNG")
+            # print(f"✅ 截图已保存: {self.save_path}")
+            return str(self.save_path)
+        except Exception as e:
+            # print(f"❌ 截图失败: {e}")
+            return None
+
+    def start_service(self, hotkey="ctrl+alt+s"):
+        """启动热键服务"""
+        # print(f"🎯 启动截图服务")
+        # print(f"   热键: {hotkey}")
+        # print(f"   保存到: {self.save_path}")
+        # print("   按 Ctrl+C 停止")
+        # print("-" * 40)
+
+        keyboard.add_hotkey(hotkey, self.capture)
+
+        try:
+            keyboard.wait()
+        except KeyboardInterrupt:
+            pass
+            # print("\n🛑 服务已停止")
+        finally:
+            keyboard.unhook_all_hotkeys()
 
 
-def main():
-    """主函数"""
-    print("正在启动麻将游戏...")
+# ==================== 使用示例 ====================
 
-    # 创建UI
-    ui = SimpleGameUI()
+def test_hotkey():
+    """测试热键功能"""
+    import threading
 
-    while True:
-        choice = ui.show_main_menu()
+    # print("测试热键响应...")
+    # print("按 Ctrl+Alt+S 测试截图")
+    # print("按 Ctrl+C 退出测试")
+    # print("-" * 40)
 
-        if choice == "1":
-            # 开始新游戏
-            player_names = ["玩家", "AI东", "AI南", "AI西"]
+    def on_hotkey():
+        # print("🔥 热键被触发!")
+        time.sleep(0.5)
+        # print("正在截图...")
 
-            # 创建游戏控制器
-            game = GameController(player_names)
+        # 模拟截图
+        try:
+            filepath = "./test_hotkey.png"
+            if os.path.exists(filepath):
+                os.remove(filepath)
+            ImageGrab.grab().save(filepath, "PNG")
+            # print(f"✅ 测试截图已保存: {filepath}")
+        except Exception as e:
+            pass
+            # print(f"❌ 测试失败: {e}")
 
-            # 开始游戏
-            game.start_game()
+    # 注册测试热键
+    keyboard.add_hotkey("ctrl+alt+s", on_hotkey)
+    keyboard.add_hotkey("ctrl+alt+t", lambda: print("备用热键测试"))
 
-            # 询问是否再来一局
-            again = input("\n是否再来一局? (y/n): ")
-            if again.lower() != 'y':
-                print("返回主菜单...")
+    # print("热键已注册，开始测试...")
+    keyboard.wait()
 
         elif choice == "2":
             # 显示游戏规则
@@ -596,14 +239,56 @@ from mahjong.hand_calculating.hand import HandCalculator
 from mahjong.tile import TilesConverter
 
 if __name__ == "__main__":
-    # 初始化计算器
-    calculator = HandCalculator()
+    import sys
 
-    # 计算手牌
-    tiles = TilesConverter.string_to_136_array(man='123', pin='456', sou='789', honors='11122')
-    win_tile = TilesConverter.string_to_136_array(honors='2')[0]
+    if len(sys.argv) > 1:
+        command = sys.argv[1].lower()
 
-    result = calculator.estimate_hand_value(tiles, win_tile)
-    print(result)
-    exit()
-    main()
+        if command == "test":
+            # 测试热键
+            test_hotkey()
+
+        elif command == "quick":
+            # 快速截图
+            qs = QuickScreenshot()
+            qs.capture()
+
+        elif command == "simple":
+            # 简单服务
+            qs = QuickScreenshot()
+            qs.start_service()
+
+        elif command == "multi":
+            # 多热键服务
+            service = ScreenshotService()
+            # 注册多个热键
+            keyboard.add_hotkey("ctrl+alt+s", service.capture_and_save)
+            keyboard.add_hotkey("f12", service.capture_and_save)
+            keyboard.add_hotkey("# print screen", service.capture_and_save)
+
+            # print("多热键服务启动:")
+            # print("  Ctrl+Alt+S - 截图")
+            # print("  F12 - 截图")
+            # print("  Print Screen - 截图")
+            # print("  按 Ctrl+C 停止")
+
+            keyboard.wait()
+
+        else:
+            pass
+            # print(f"未知命令: {command}")
+            # print("可用命令: test, quick, simple, multi")
+
+    else:
+        # 默认启动完整服务
+        # print("启动截图服务 (Ctrl+Alt+S)...")
+        print("""
+        嗨！亲爱的雀友！(*╹▽╹*)
+
+我是你的小可爱**雀宝**，专门帮你看牌局、出主意的AI小助手！
+
+让我们成为最佳拍档，一起征战雀场吧！
+
+快截张图试试看，我已经迫不及待要帮你分析啦！(≧∇≦)ﾉ""")
+        service = ScreenshotService()
+        service.start()
