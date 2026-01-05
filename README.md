@@ -1,201 +1,231 @@
-# 日麻小助手Agent 核心Workflow
+# 雀宝 · 日麻牌局分析助手
 
 ![小助手模块流程图](./img.png)
 
-# 项目架构
+一个基于 AI 的日本麻将（立直麻将）实时分析助手，通过 YOLO 视觉识别 + 大语言模型，为玩家提供专业的牌局分析和策略建议。
 
-```
-ri_mahjong_helper_agent/  # 项目根目录
-├── README.md             # 项目说明文档（包含功能介绍、部署步骤、依赖说明等）
-├── requirements.txt      # 项目依赖包列表（如yolov5/8、opencv-python、torch等）
-├── config/               # 配置文件目录
-│   ├── global_config.py  # 全局配置（截图频率、YOLO模型路径、LLM API密钥等）
-│   ├── yolo_config.yaml  # YOLO模型配置（类别映射、置信度阈值等）
-│   └── llm_prompt.py     # LLM Prompt模板配置
-├── perception/           # 感知层（Perception）
-│   ├── __init__.py
-│   ├── cv_module/        # 计算机视觉模块（基于YOLO）
-│   │   ├── __init__.py
-│   │   ├── screen_capture.py  # 屏幕捕获（固定频率截图、画面位置识别）
-│   │   ├── yolo_detector.py   # YOLO麻将牌识别（分割、定位、分类）
-│   │   ├── manual_correction.py  # 手动修正模块（鼠标点击输入对局信息）
-│   │   └── utils.py      # CV辅助工具（图像预处理、坐标转换等）
-│   └── data_input.py     # 感知层数据整合（AI输出+人工输入统一封装）
-├── world_model/          # 世界模型（World Model）
-│   ├── __init__.py
-│   ├── entities/         # 麻将核心对象定义
-│   │   ├── __init__.py
-│   │   ├── mahjong_table.py  # MahjongTable类
-│   │   ├── player.py         # Player类
-│   │   ├── hand.py           # Hand类（含暗手、副露子类）
-│   │   └── mahjong_tile.py   # MahjongTile类
-│   ├── game_frame.py     # 游戏帧生成（多通道张量转化）
-│   └── status_manager.py # 对局状态管理（接收感知层数据，更新世界模型）
-├── decision/             # 决策层（Decision）
-│   ├── __init__.py
-│   ├── point_calculator/ # 点数计算模块
-│   │   ├── __init__.py
-│   │   ├── fan_fu_calc.py    # 番数、符数计算
-│   │   ├── point_calc.py     # 最终点数计算
-│   │   └── state_machine.py  # 牌型状态机转移（清一色、九莲宝灯等）
-│   ├── hand_strategy/    # 牌型推荐与操作指导
-│   │   ├── __init__.py
-│   │   ├── hand_recommend.py # top10荣和牌型及概率推荐
-│   │   ├── probability_tree.py # 概率树与期望计算
-│   │   └── operation_guide.py # 摸切/手切/鸣牌/胡牌策略（含防守策略）
-│   └── strategy_optimize.py # 策略最优化（胡牌概率+打点期望权衡）
-├── execution/            # 执行层（Execution）
-│   ├── __init__.py
-│   ├── llm_client/       # LLM API接入模块
-│   │   ├── __init__.py
-│   │   ├── base_llm.py   # LLM基础封装（统一调用接口）
-│   │   └── openai_llm.py # 具体LLM实现（如OpenAI API，可扩展其他LLM）
-│   └── prompt_engineering.py # Prompt工程（决策信息包装为个性化语句）
-├── utils/                # 全局工具类
-│   ├── __init__.py
-│   ├── log_utils.py      # 日志工具
-│   ├── data_utils.py     # 数据处理工具（张量操作、数据校验等）
-│   └── ui_utils.py       # 简易UI工具（手动修正界面、信息展示界面）
-├── models/               # 模型文件目录（存放YOLO权重、自定义模型等）
-│   └── yolov8_mahjong.pt # YOLO麻将识别权重文件
-├── img/                  # 图片目录（存放流程图、示例图片等）
-│   └── img.png           # 小助手模块流程图
-├── tests/                # 单元测试目录
-│   ├── __init__.py
-│   ├── test_perception.py
-│   ├── test_world_model.py
-│   ├── test_decision.py
-│   └── test_execution.py
-└── main.py               # 项目入口文件（整合各模块，启动日麻小助手）
+## ✨ 核心功能
+
+- **🎯 一键截图分析**：自动截取游戏画面，识别手牌，生成专业分析报告
+- **🤖 AI 智能解说**：基于 DeepSeek 大模型，以"雀宝"（可爱女牌友）的角色提供自然口语化的策略建议
+- **💬 上下文对话**：支持多轮对话，AI 会记住之前的交流内容
+- **📊 专业分析**：包含向听数、听牌分析、打点计算、牌效评估等
+- **🎨 美观 GUI**：深色主题界面，支持 Markdown 渲染，流式输出展示
+
+## 🚀 快速开始
+
+### 环境要求
+
+- Python 3.9
+- Windows 10/11（截图功能基于 Windows API）
+
+### 安装依赖
+
+```bash
+pip install -r requirements.txt
 ```
 
-## Perception感知层
+### 配置 API Key
 
-### CV计算机视觉（基于YOLO）
+程序测试中使用的是 DeepSeek-V3.2，但是DeekSeek的API格式是兼容OpenAI的，因此OpenAI的API应该也是兼容的
 
-输入需要自己在游戏界面捕获，
-AI自动输出本家手牌信息（不包括副露），
-人工输出其他全部对局信息（兼容置为null）
+设置 DeepSeek API Key：
 
-#### 纯视觉读取对局信息
-
-#### Python脚本自动识别游戏画面位置大小
-
-#### 固定频率截图（10到15 Hz）
-
-#### 基于YOLO进行麻将牌面分割、定位和分类识别
-
-#### 手动修正
-
-识别率在85%左右，补充提供鼠标click部署世界模型（点击输入对局信息）
-点击牌局模块后（如上家牌河区），出现所有牌（包括删除键）的界面，点击后就能输出牌河信息
-
-### World Model世界模型
-
-输入是status类信息，
-输出是游戏帧
-
-#### 麻将对象转化
-
-```python
-class MahjongTable:
-    """"
-    游戏桌类：
-    管理场次类型（半庄战）、
-    局次类型（南一局）、
-    庄家信息（用户1）、
-    手牌区与副露区、
-    牌河区、
-    牌山区、
-    岭上区、
-    宝牌区、
-    玩家点数（25000点）、
-    立直信息、
-    校验全局信息（全局点数和守恒）
-    """
-    pass
-
-    
-class Player:
-    """"
-    玩家类：
-    玩家信息、
-    当前点数、
-    是否庄家、
-    是否立直、
-    手牌与副露、
-    切/吃/碰/杠/胡方法
-    """
-    pass
-    
-    
-class Hand:
-    """"
-    手牌类：
-    暗手子类、
-    副露子类、
-    存储、排序、查找、移除等方法
-    """
-    pass
-    
-    
-class MahjongTile:
-    """
-    麻将牌类，用于表示一张麻将牌的属性和行为
-    包含类型：万、条、筒（序数牌）；东、南、西、北（风牌）；中、发、白（箭牌）
-    """
-    pass
+```bash
+# Windows PowerShell
+setx DEEPSEEK_API_KEY "你的deepseek密钥"
 ```
 
-#### 多通道张量
+### 运行程序
 
-将对局信息转化成一个多通道张量————游戏帧
+```bash
+python main.py
+```
 
-1. 手牌（本家）len=34
-2. 副露（本家、下家、对家、上家）
-3. 牌河（时序）
-4. 点数
-5. 场风
-6. 场次局次轮次
+程序会自动打开 GUI 界面，你可以：
 
+1. **一键截图分析**：点击"一键截图 + 分析 + AI解说"按钮
+   - 自动截取当前屏幕
+   - YOLO 识别手牌
+   - 生成分析报告
+   - AI 流式解说
 
-## Decision决策层
+2. **手动分析**：如果已有 `output.txt`，点击"开始分析（流式输出）"
 
-### 点数计算
+3. **聊天对话**：在底部输入框输入问题，与"雀宝"进行多轮对话
 
-实现输入荣和牌型，输出番数、符数、点数
+## 📁 项目结构（不包含部分测试）
 
-#### 状态机转移
+```
+MahjongPaw/
+├── main.py                    # 项目入口（启动 GUI）
+├── api_gui.py                 # GUI 主界面（流式输出、聊天、Markdown 渲染）
+├── analyzer.py                # 牌局分析器（向听数、听牌、打点计算）
+├── api.py                     # 大模型 API 调用（DeepSeek）
+├── cal_scores.py              # 点数计算模块
+├── Mahjong_YOLO/              # YOLO 麻将牌识别模块
+│   ├── trained_models_v2/     # 训练好的 YOLO 模型权重
+│   │   ├── yolo11n_best.pt
+│   │   ├── yolo11s_best.pt
+│   │   └── yolo11m_best.pt
+│   ├── notebooks/             # 数据标注和处理 Notebook
+│   └── scripts/               # 模型转换脚本（ONNX、CoreML）
+├── world_model/               # 世界模型（麻将对象定义）
+│   ├── mahjong_table.py       # 麻将桌类
+│   ├── mahjong_player.py      # 玩家类
+│   ├── mahjong_tile.py        # 麻将牌类
+│   └── mahjong_meld.py        # 副露类
+├── models/                    # 模型文件目录
+│   └── yolov8_mahjong.pt      # YOLO 模型权重（备用）
+├── requirements.txt           # 项目依赖
+└── README.md                 # 项目说明文档
+```
 
-例子：
-1. 手牌触发胡牌状态：传统型（雀头 + 4 * 刻子/顺子/杠子）、七对子、国士无双
-2. 传统型 + 全是万/条/筒 转移为 清一色
-3. 清一色 + 幺九刻子 + 一气通贯 转移为 九莲宝灯
-4. 九莲宝灯 + 九面听 转移为 纯正九莲宝灯
+## 🔧 核心模块说明
 
-### 牌型推荐
+### 1. GUI 界面 (`api_gui.py`)
 
-实现输入当前牌型（13张 or 14张），输出top10可能荣和的牌型以及其概率
+**功能**：
+- 流式输出展示 AI 回复
+- 聊天输入框支持多轮对话
+- Markdown 渲染（标题、列表、加粗）
+- 深色主题界面
 
-#### 概率树 + 期望
+**主要类**：
+- `StreamingChatGUI`：主界面类，管理 UI 和流式输出
 
+### 2. 牌局分析器 (`analyzer.py`)
 
+**功能**：
+- 手牌识别结果分析
+- 向听数计算
+- 听牌分析（含打点计算）
+- 牌型分布统计
 
-### 摸切手切鸣牌指导
+**主要类**：
+- `FixedMahjongAnalyzer`：分析器主类
+- `run_analysis_to_file()`：一键分析并写入文件
 
-实现遇到切/鸣/胡事件时，给出策略（操作增加的胡牌概率和打点期望）
+### 3. YOLO 识别 (`Mahjong_YOLO/test.py`)
 
-#### 策略最优化
+**功能**：
+- 从截图识别麻将牌
+- 定位手牌区域
+- 转换为标准麻将字符串格式
 
-#### 防守策略
+**主要函数**：
+- `perceive()`：识别入口，返回手牌列表和字符串
 
-## Execution执行层
+### 4. 截图服务 (`main.py`)
 
-### LLM API接入
+**功能**：
+- 热键截图（Ctrl+Alt+S）
+- 截图保存和管理
 
-本质是一个对话助手，给出策略，要有“人性”地说出来，表现出像一个真人在对玩家进行麻将指导、聊天和提醒玩家场上信息
+**主要类**：
+- `ScreenshotService`：截图服务类
+- `QuickScreenshot`：快速截图类
 
+### 5. 世界模型 (`world_model/`)
 
-### Prompt工程
+**功能**：
+- 麻将对象建模
+- 游戏状态管理
 
-将决策信息，包装成个性化语句输出
+**主要类**：
+- `MahjongTable`：游戏桌
+- `MahjongPlayer`：玩家
+- `MahjongTile`：麻将牌
+- `MahjongMeld`：副露
+
+## 🎮 使用流程
+
+### 方式一：一键截图分析
+
+1. 打开日麻游戏，进入对局
+2. 运行 `python main.py` 打开 GUI
+3. 点击"一键截图 + 分析 + AI解说"
+4. 等待识别和分析完成
+5. 查看 AI 的流式解说和建议
+
+### 方式二：手动分析
+
+1. 手动截图保存到 `Mahjong_YOLO/test.png`
+2. 运行分析生成 `output.txt`
+3. 在 GUI 中点击"开始分析（流式输出）"
+
+### 方式三：聊天对话
+
+1. 在 GUI 底部输入框输入问题
+2. 按回车或点击"发送"
+3. AI 会基于上下文回复
+4. 可以继续追问，AI 会记住之前的对话
+
+## 📊 分析报告内容
+
+分析报告包含以下信息：
+
+- **基础信息**：手牌、牌数、自风、场风、立直状态
+- **牌型分布**：万子/筒子/索子/字牌数量，幺九牌比例
+- **向听数分析**：当前向听数，是否听牌
+- **听牌分析**（如果听牌）：
+  - 听牌张列表及点数
+  - 高打点听牌张详情
+  - 役种和翻数信息
+  - 平均点数和最高点数
+  - 策略建议
+
+## 🤖 AI 角色设定
+
+"雀宝"是一位：
+- 非常会打立直麻将的女玩家
+- 性格元气可爱
+- 用自然口语交流，像真人牌友聊天
+- 专业判断可靠，但语气轻松
+
+## 🔑 依赖说明
+
+主要依赖包：
+- `openai`：DeepSeek API 调用
+- `ultralytics`：YOLO 模型推理
+- `mahjong`：麻将规则和计算
+- `tkinter`：GUI 界面（Python 内置）
+- `PIL`：图像处理
+- `keyboard`：热键监听
+
+完整依赖列表见 `requirements.txt`。
+
+## 📝 注意事项
+
+1. **截图识别率**：YOLO 识别率约 85%，复杂场景可能需要手动修正
+2. **API Key**：需要有效的 DeepSeek API Key（代码中有默认值，但建议使用自己的）
+3. **截图路径**：默认保存到 `./Mahjong_YOLO/test.png`
+4. **分析结果**：会写入 `output.txt`，GUI 会读取并展示
+
+## 🛠️ 开发说明
+
+### 添加新的分析功能
+
+在 `analyzer.py` 的 `FixedMahjongAnalyzer` 类中添加新方法。
+
+### 修改 AI 角色设定
+
+编辑 `api_gui.py` 中的 `system_prompt` 变量。
+
+### 调整 GUI 样式
+
+修改 `api_gui.py` 中的样式配置（颜色、字体等）。
+
+## 📄 许可证
+
+本项目仅供学习和研究使用。
+
+## 🙏 致谢
+
+- YOLO 模型训练基于 Ultralytics
+- 麻将规则计算基于 `mahjong` 库
+- AI 能力由 DeepSeek 提供
+
+---
+
+**雀宝**：让我们一起征战雀场吧！(≧∇≦)ﾉ

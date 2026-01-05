@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="60f93b40-db35-4048-9480-69d5f3362cc4" name="更改" comment="CLI Mahjong era" />
+    <list default="true" id="60f93b40-db35-4048-9480-69d5f3362cc4" name="更改" comment="GUI2.0版本完成" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -53,10 +53,11 @@
     "Python.main.executor": "Run",
     "Python.test.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "D:/Works/code/Python/MahjongPaw/world_model/entities"
+    "git-widget-placeholder": "world",
+    "last_opened_file_path": "D:/Works/code/Python/MahjongPaw",
+    "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\Works\code\Python\MahjongPaw\world_model\entities" />
@@ -66,7 +67,7 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration name="analyzer" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python">
       <module name="MahjongPaw" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -79,7 +80,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="D:\Works\code\Python\MahjongPaw\analyzer.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -161,7 +162,31 @@
       <option name="project" value="LOCAL" />
       <updated>1766932311871</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="GUI2.0版本完成">
+      <option name="closed" value="true" />
+      <created>1767610914995</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1767610914995</updated>
+    </task>
+    <task id="LOCAL-00009" summary="GUI2.0版本完成">
+      <option name="closed" value="true" />
+      <created>1767611048967</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1767611048967</updated>
+    </task>
+    <task id="LOCAL-00010" summary="GUI2.0版本完成">
+      <option name="closed" value="true" />
+      <created>1767611112646</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1767611112646</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -183,8 +208,13 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/Mahjong_YOLO" />
+    </ignored-roots>
     <MESSAGE value="CLI Mahjong era" />
-    <option name="LAST_COMMIT_MESSAGE" value="CLI Mahjong era" />
+    <MESSAGE value="1.0版本完成" />
+    <MESSAGE value="GUI2.0版本完成" />
+    <option name="LAST_COMMIT_MESSAGE" value="GUI2.0版本完成" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

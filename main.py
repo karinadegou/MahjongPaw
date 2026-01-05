@@ -223,72 +223,15 @@ def test_hotkey():
     # print("热键已注册，开始测试...")
     keyboard.wait()
 
-        elif choice == "2":
-            # 显示游戏规则
-            ui.show_game_rules()
 
-        elif choice == "3":
-            # 退出游戏
-            print("\n感谢游戏，再见!")
-            sys.exit(0)
+"""
+项目入口：
+- 保留截图相关的核心类（ScreenshotService / QuickScreenshot），供其他模块调用
+- 入口改为启动 GUI（api_gui.py），所有用户可见的信息都通过 GUI 展示
+"""
 
-        else:
-            print("无效选择，请重新输入!")
-
-from mahjong.hand_calculating.hand import HandCalculator
-from mahjong.tile import TilesConverter
 
 if __name__ == "__main__":
-    import sys
+    from api_gui import main as gui_main
 
-    if len(sys.argv) > 1:
-        command = sys.argv[1].lower()
-
-        if command == "test":
-            # 测试热键
-            test_hotkey()
-
-        elif command == "quick":
-            # 快速截图
-            qs = QuickScreenshot()
-            qs.capture()
-
-        elif command == "simple":
-            # 简单服务
-            qs = QuickScreenshot()
-            qs.start_service()
-
-        elif command == "multi":
-            # 多热键服务
-            service = ScreenshotService()
-            # 注册多个热键
-            keyboard.add_hotkey("ctrl+alt+s", service.capture_and_save)
-            keyboard.add_hotkey("f12", service.capture_and_save)
-            keyboard.add_hotkey("# print screen", service.capture_and_save)
-
-            # print("多热键服务启动:")
-            # print("  Ctrl+Alt+S - 截图")
-            # print("  F12 - 截图")
-            # print("  Print Screen - 截图")
-            # print("  按 Ctrl+C 停止")
-
-            keyboard.wait()
-
-        else:
-            pass
-            # print(f"未知命令: {command}")
-            # print("可用命令: test, quick, simple, multi")
-
-    else:
-        # 默认启动完整服务
-        # print("启动截图服务 (Ctrl+Alt+S)...")
-        print("""
-        嗨！亲爱的雀友！(*╹▽╹*)
-
-我是你的小可爱**雀宝**，专门帮你看牌局、出主意的AI小助手！
-
-让我们成为最佳拍档，一起征战雀场吧！
-
-快截张图试试看，我已经迫不及待要帮你分析啦！(≧∇≦)ﾉ""")
-        service = ScreenshotService()
-        service.start()
+    gui_main()
