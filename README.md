@@ -68,8 +68,7 @@ MahjongPaw/
 │   │   ├── yolo11n_best.pt
 │   │   ├── yolo11s_best.pt
 │   │   └── yolo11m_best.pt
-│   ├── notebooks/             # 数据标注和处理 Notebook
-│   └── scripts/               # 模型转换脚本（ONNX、CoreML）
+│   ├── notebooks/             # 数据标注和处理
 ├── world_model/               # 世界模型（麻将对象定义）
 │   ├── mahjong_table.py       # 麻将桌类
 │   ├── mahjong_player.py      # 玩家类

@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>雀宝 · 日麻牌局分析助手</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #1a1b26;
+            color: #a9b1d6;
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #7aa2f7 0%, #bb9af7 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .card {
+            background: rgba(26, 27, 38, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(122, 162, 247, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(122, 162, 247, 0.3);
+            box-shadow: 0 10px 30px -10px rgba(122, 162, 247, 0.2);
+        }
+
+        .feature-icon {
+            background: linear-gradient(135deg, rgba(122, 162, 247, 0.1) 0%, rgba(187, 154, 247, 0.1) 100%);
+            border-radius: 12px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #7aa2f7 0%, #bb9af7 100%);
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(122, 162, 247, 0.4);
+        }
+
+        /* 自定义滚动条 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1a1b26;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #414868;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #565f89;
+        }
+
+        .hero-pattern {
+            background-image: radial-gradient(rgba(122, 162, 247, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .home-bg {
+            background-image:
+                radial-gradient(circle at 20% 10%, rgba(122, 162, 247, 0.18) 0%, rgba(26, 27, 38, 0.88) 45%, rgba(22, 22, 30, 0.98) 100%),
+                linear-gradient(180deg, rgba(26, 27, 38, 0.15) 0%, rgba(22, 22, 30, 0.85) 100%),
+                url('img/background.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    </style>
+</head>
+<body class="min-h-screen hero-pattern">
+
+    <!-- 导航栏 -->
+    <nav class="fixed w-full z-50 bg-opacity-90 bg-[#1a1b26] border-b border-[#414868]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="text-2xl font-bold gradient-text">🀄 雀宝 MahjongPaw</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="#home" class="hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">首页</a>
+                        <a href="#features" class="hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">核心功能</a>
+                        <a href="#demo" class="hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">演示视频</a>
+                        <a href="#tech" class="hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">技术架构</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero 区域 -->
+    <section id="home" class="pt-32 pb-20 px-4 home-bg">
+        <div class="max-w-7xl mx-auto text-center">
+            <h1 class="animate__animated animate__fadeInDown text-5xl md:text-7xl font-bold mb-8">
+                <span class="gradient-text">你的 AI 日麻私教</span>
+            </h1>
+            <p class="animate__animated animate__fadeInUp animate__delay-1s text-xl md:text-2xl text-[#787c99] mb-12 max-w-3xl mx-auto">
+                基于 YOLO 视觉识别 + DeepSeek 大模型的立直麻将实时分析助手。
+                <br>一键截图，秒出分析，让"雀宝"带你征战雀魂！
+            </p>
+            <div class="animate__animated animate__fadeInUp animate__delay-1s flex justify-center gap-6">
+                <a href="https://github.com/karinadegou/MahjongPaw" class="btn-primary px-8 py-4 rounded-full font-bold text-lg flex items-center gap-2">
+                    <i class="fab fa-github"></i> 查看源码
+                </a>
+                <a href="#demo" class="bg-[#24283b] border border-[#414868] hover:bg-[#2f3549] text-white px-8 py-4 rounded-full font-bold text-lg transition-all flex items-center gap-2">
+                    <i class="fas fa-play"></i> 观看演示
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 立直麻将规则简介 -->
+    <section id="rules" class="py-20 bg-[#16161e]">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-16"><span class="gradient-text">立直麻将规则简介</span></h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- 1. 基本目标 -->
+                <div class="card p-6 rounded-2xl border-l-4 border-[#7aa2f7] hover:border-[#7aa2f7] group transition-all duration-300 hover:-translate-y-2 flex flex-col">
+                    <h3 class="text-xl font-bold text-white mb-3">1. 基本目标</h3>
+                    <p class="text-[#787c99] mb-4 text-sm leading-relaxed flex-grow">通过摸牌和切牌，凑成"4组面子 + 1对雀头"的14张牌型，率先完成的一方获胜。</p>
+                    <div class="rounded-lg overflow-hidden border border-[#414868] shadow-lg">
+                        <img src="img/ron.png" alt="胡牌示例" class="w-full h-50 object-cover transform group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                </div>
+
+                <!-- 2. 什么是"立直"？ -->
+                <div class="card p-6 rounded-2xl border-l-4 border-[#bb9af7] hover:border-[#bb9af7] group transition-all duration-300 hover:-translate-y-2 flex flex-col">
+                    <h3 class="text-xl font-bold text-white mb-3">2. 什么是"立直"？</h3>
+                    <p class="text-[#787c99] mb-4 text-sm leading-relaxed flex-grow">门前清听牌时支付1000点宣布"立直"。立直后不能换牌，但胡牌增加一番，并有"一发"和"里宝牌"加成。</p>
+                    <div class="rounded-lg overflow-hidden border border-[#414868] shadow-lg">
+                        <img src="img/riichi.png" alt="立直棒" class="w-full h-50 object-cover transform group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                </div>
+
+                <!-- 3. 役种的重要性 -->
+                <div class="card p-6 rounded-2xl border-l-4 border-[#7dcfff] hover:border-[#7dcfff] group transition-all duration-300 hover:-translate-y-2 flex flex-col">
+                    <h3 class="text-xl font-bold text-white mb-3">3. 役种的重要性</h3>
+                    <p class="text-[#787c99] mb-4 text-sm leading-relaxed flex-grow">"无役不能胡"。常见役种：立直、断幺九、役牌、平和。新手常犯只有牌型没有役种（"振听"或"无役"）。</p>
+                    <div class="rounded-lg overflow-hidden border border-[#414868] shadow-lg">
+                        <img src="img/zt.png" alt="振听/役种" class="w-full h-50 object-cover transform group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                </div>
+
+                <!-- 4. 常见牌型示例 -->
+                <div class="card p-6 rounded-2xl border-l-4 border-[#9ece6a] hover:border-[#9ece6a] group transition-all duration-300 hover:-translate-y-2 flex flex-col">
+                    <h3 class="text-xl font-bold text-white mb-3">4. 常见牌型示例</h3>
+                    <p class="text-[#787c99] mb-4 text-sm leading-relaxed flex-grow">"雀宝"会实时帮你计算是否听牌、缺少什么役种，哪怕是新手也能轻松上手！</p>
+                    <div class="rounded-lg overflow-hidden border border-[#414868] shadow-lg bg-[#24283b] flex items-center justify-center h-50">
+                        <img src="img/pai.png" alt="常见牌型示例" class="w-full h-50 object-cover transform group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 功能展示 -->
+    <section id="features" class="py-20">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-16"><span class="gradient-text">强大的核心功能</span></h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="card p-8 rounded-2xl">
+                    <div class="feature-icon w-14 h-14 flex items-center justify-center mb-6 text-2xl">🎯</div>
+                    <h3 class="text-xl font-bold text-white mb-4">一键截图分析</h3>
+                    <p class="text-[#787c99]">无需手动输入，Ctrl+Alt+S 一键截取游戏画面。YOLO 模型精准识别手牌，准确率高达 95%+。</p>
+                </div>
+                <!-- Feature 2 -->
+                <div class="card p-8 rounded-2xl">
+                    <div class="feature-icon w-14 h-14 flex items-center justify-center mb-6 text-2xl">🤖</div>
+                    <h3 class="text-xl font-bold text-white mb-4">AI 智能解说</h3>
+                    <p class="text-[#787c99]">化身元气可爱的"雀宝"，基于 DeepSeek 大模型提供自然口语化的策略建议和即时吐槽。</p>
+                </div>
+                <!-- Feature 3 -->
+                <div class="card p-8 rounded-2xl">
+                    <div class="feature-icon w-14 h-14 flex items-center justify-center mb-6 text-2xl">📊</div>
+                    <h3 class="text-xl font-bold text-white mb-4">专业牌理计算</h3>
+                    <p class="text-[#787c99]">内置专业算法，实时计算向听数、进张数、听牌打点，助你做出最优切牌选择。</p>
+                </div>
+            </div>
+
+            <div class="mt-16">
+                <h3 class="text-2xl font-bold text-center mb-10"><span class="gradient-text">识别效果对比</span></h3>
+                <div class="grid grid-cols-1 gap-8">
+                    <div class="card p-6 rounded-2xl">
+                        <h4 class="text-lg font-bold text-white mb-4">图像识别对比</h4>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="rounded-lg overflow-hidden border border-[#414868] bg-[#24283b]">
+                                <img src="img/doubao_kan.png" alt="豆包识别" class="w-full h-80 md:h-96 object-contain">
+                                <div class="px-3 py-2 text-xs text-[#565f89]">豆包识别</div>
+                            </div>
+                            <div class="rounded-lg overflow-hidden border border-[#414868] bg-[#24283b]">
+                                <img src="img/real_kan.png" alt="雀宝截图" class="w-full h-80 md:h-96 object-contain">
+                                <div class="px-3 py-2 text-xs text-[#565f89]">雀宝截图</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card p-6 rounded-2xl">
+                        <h4 class="text-lg font-bold text-white mb-4">向听识别对比</h4>
+                        <div class="grid grid-cols-1 gap-4">
+                            <div class="rounded-lg overflow-hidden border border-[#414868] bg-[#24283b]">
+                                <img src="img/doubao_tin.png" alt="豆包识别" class="w-full h-80 md:h-96 object-contain">
+                                <div class="px-3 py-2 text-xs text-[#565f89]">豆包识别</div>
+                            </div>
+                            <div class="rounded-lg overflow-hidden border border-[#414868] bg-[#24283b]">
+                                <img src="img/real_tin.png" alt="雀宝截图" class="w-full h-80 md:h-96 object-contain">
+                                <div class="px-3 py-2 text-xs text-[#565f89]">雀宝截图</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+
+    <section id="gui" class="py-20 bg-[#16161e]">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-16"><span class="gradient-text">桌面 GUI</span></h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                <div class="card p-6 rounded-2xl">
+                    <h3 class="text-xl font-bold text-white mb-4">界面简介</h3>
+                    <p class="text-[#787c99] mb-4">提供一键截图、牌局分析与流式 AI 解说的桌面端图形界面，支持连续聊天追问与实时输出展示。</p>
+                    <div class="space-y-2 text-[#787c99]">
+                        <div>• 顶部标题与说明，明确当前工作流程</div>
+                        <div>• 中部只读文本区，实时显示大模型流式输出</div>
+                        <div>• 底部控制按钮：开始分析、自动截图+分析+解说、清空结果</div>
+                        <div>• 聊天输入与发送，可与“雀宝”自然对话</div>
+                        <div>• 使用 DeepSeek 接口与 PIL 截图，环境变量 DEEPSEEK_API_KEY 控制密钥</div>
+                    </div>
+                    <div class="mt-6 flex gap-3">
+                        <a href="#demo" class="btn-primary px-6 py-3 rounded-full font-bold text-sm flex items-center gap-2"><i class="fas fa-play"></i> 观看演示</a>
+                        <a href="api_gui.py" class="bg-[#24283b] border border-[#414868] hover:bg-[#2f3549] text-white px-6 py-3 rounded-full font-bold text-sm transition-all flex items-center gap-2"><i class="fas fa-code"></i> 查看源码</a>
+                    </div>
+                </div>
+                <div class="card p-2 rounded-2xl overflow-hidden">
+                    <img src="img/structure.png" alt="GUI 界面结构" class="w-full h-auto object-contain">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 视频演示区域 -->
+    <section id="demo" class="py-20">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12"><span class="gradient-text">实机演示</span></h2>
+            <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-[#414868] bg-black">
+                <video class="w-full aspect-video" controls poster="./img/img.png">
+                    <source src="img/sz.mp4" type="video/mp4">
+                    您的浏览器不支持 HTML5 视频标签。
+                </video>
+            </div>
+            <p class="text-center mt-6 text-[#787c99]">
+                <i class="fas fa-info-circle mr-2"></i> 观看雀宝在实战中的精彩表现
+            </p>
+        </div>
+    </section>
+
+    <!-- 技术栈 -->
+    <section id="tech" class="py-20 bg-[#16161e]">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-16"><span class="gradient-text">技术架构</span></h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                <div class="p-6 bg-[#24283b] rounded-xl hover:bg-[#2f3549] transition-colors">
+                    <i class="fab fa-python text-4xl mb-4 text-[#7aa2f7]"></i>
+                    <h4 class="font-bold text-white">Python 3.9</h4>
+                </div>
+                <div class="p-6 bg-[#24283b] rounded-xl hover:bg-[#2f3549] transition-colors">
+                    <i class="fas fa-eye text-4xl mb-4 text-[#bb9af7]"></i>
+                    <h4 class="font-bold text-white">YOLO Vision</h4>
+                </div>
+                <div class="p-6 bg-[#24283b] rounded-xl hover:bg-[#2f3549] transition-colors">
+                    <i class="fas fa-brain text-4xl mb-4 text-[#7dcfff]"></i>
+                    <h4 class="font-bold text-white">DeepSeek LLM</h4>
+                </div>
+                <div class="p-6 bg-[#24283b] rounded-xl hover:bg-[#2f3549] transition-colors">
+                    <i class="fas fa-window-maximize text-4xl mb-4 text-[#9ece6a]"></i>
+                    <h4 class="font-bold text-white">Tkinter GUI</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 底部 -->
+    <footer class="bg-[#15161e] py-12 border-t border-[#414868]">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-[#565f89]">© 2026 MahjongPaw 雀宝. All rights reserved.</p>
+            <p class="text-sm mt-2 text-[#414868]">仅供学习研究使用，请勿用于商业用途</p>
+        </div>
+    </footer>
+
+    <script>
+        // 简单的滚动动画触发
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate__animated', 'animate__fadeInUp');
+                    }
+                });
+            });
+
+            document.querySelectorAll('.card').forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+</html>

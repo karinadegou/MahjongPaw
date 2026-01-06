@@ -4,7 +4,16 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="60f93b40-db35-4048-9480-69d5f3362cc4" name="更改" comment="GUI2.0版本完成" />
+    <list default="true" id="60f93b40-db35-4048-9480-69d5f3362cc4" name="更改" comment="GUI2.0版本完成">
+      <change afterPath="$PROJECT_DIR$/img/real_kan.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/real_tin.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/img/sz.mp4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/img/img.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/output.txt" beforeDir="false" afterPath="$PROJECT_DIR$/output.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/日麻Agent架构.md" beforeDir="false" afterPath="$PROJECT_DIR$/日麻Agent架构.md" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -29,7 +38,7 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/karinadegou/MahjongPaw.git&quot;,
+    &quot;url&quot;: &quot;git@github.com:karinadegou/MahjongPaw.git&quot;,
     &quot;accountId&quot;: &quot;2bd0a237-3e7f-419e-9401-31c800a6288a&quot;
   }
 }</component>
@@ -54,12 +63,13 @@
     "Python.test.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "world",
-    "last_opened_file_path": "D:/Works/code/Python/MahjongPaw",
+    "last_opened_file_path": "D:/Works/code/Python/MahjongPaw/img",
     "settings.editor.selected.configurable": "project.propVCSSupport.DirectoryMappings"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Works\code\Python\MahjongPaw\img" />
       <recent name="D:\Works\code\Python\MahjongPaw\world_model\entities" />
     </key>
     <key name="MoveFile.RECENT_KEYS">

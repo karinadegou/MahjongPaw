@@ -5,68 +5,27 @@
 # 项目架构
 
 ```
-ri_mahjong_helper_agent/  # 项目根目录
-├── README.md             # 项目说明文档（包含功能介绍、部署步骤、依赖说明等）
-├── requirements.txt      # 项目依赖包列表（如yolov5/8、opencv-python、torch等）
-├── config/               # 配置文件目录
-│   ├── global_config.py  # 全局配置（截图频率、YOLO模型路径、LLM API密钥等）
-│   ├── yolo_config.yaml  # YOLO模型配置（类别映射、置信度阈值等）
-│   └── llm_prompt.py     # LLM Prompt模板配置
-├── perception/           # 感知层（Perception）
-│   ├── __init__.py
-│   ├── cv_module/        # 计算机视觉模块（基于YOLO）
-│   │   ├── __init__.py
-│   │   ├── screen_capture.py  # 屏幕捕获（固定频率截图、画面位置识别）
-│   │   ├── yolo_detector.py   # YOLO麻将牌识别（分割、定位、分类）
-│   │   ├── manual_correction.py  # 手动修正模块（鼠标点击输入对局信息）
-│   │   └── utils.py      # CV辅助工具（图像预处理、坐标转换等）
-│   └── data_input.py     # 感知层数据整合（AI输出+人工输入统一封装）
-├── world_model/          # 世界模型（World Model）
-│   ├── __init__.py
-│   ├── entities/         # 麻将核心对象定义
-│   │   ├── __init__.py
-│   │   ├── mahjong_table.py  # MahjongTable类
-│   │   ├── player.py         # Player类
-│   │   ├── hand.py           # Hand类（含暗手、副露子类）
-│   │   └── mahjong_tile.py   # MahjongTile类
-│   ├── game_frame.py     # 游戏帧生成（多通道张量转化）
-│   └── status_manager.py # 对局状态管理（接收感知层数据，更新世界模型）
-├── decision/             # 决策层（Decision）
-│   ├── __init__.py
-│   ├── point_calculator/ # 点数计算模块
-│   │   ├── __init__.py
-│   │   ├── fan_fu_calc.py    # 番数、符数计算
-│   │   ├── point_calc.py     # 最终点数计算
-│   │   └── state_machine.py  # 牌型状态机转移（清一色、九莲宝灯等）
-│   ├── hand_strategy/    # 牌型推荐与操作指导
-│   │   ├── __init__.py
-│   │   ├── hand_recommend.py # top10荣和牌型及概率推荐
-│   │   ├── probability_tree.py # 概率树与期望计算
-│   │   └── operation_guide.py # 摸切/手切/鸣牌/胡牌策略（含防守策略）
-│   └── strategy_optimize.py # 策略最优化（胡牌概率+打点期望权衡）
-├── execution/            # 执行层（Execution）
-│   ├── __init__.py
-│   ├── llm_client/       # LLM API接入模块
-│   │   ├── __init__.py
-│   │   ├── base_llm.py   # LLM基础封装（统一调用接口）
-│   │   └── openai_llm.py # 具体LLM实现（如OpenAI API，可扩展其他LLM）
-│   └── prompt_engineering.py # Prompt工程（决策信息包装为个性化语句）
-├── utils/                # 全局工具类
-│   ├── __init__.py
-│   ├── log_utils.py      # 日志工具
-│   ├── data_utils.py     # 数据处理工具（张量操作、数据校验等）
-│   └── ui_utils.py       # 简易UI工具（手动修正界面、信息展示界面）
-├── models/               # 模型文件目录（存放YOLO权重、自定义模型等）
-│   └── yolov8_mahjong.pt # YOLO麻将识别权重文件
-├── img/                  # 图片目录（存放流程图、示例图片等）
-│   └── img.png           # 小助手模块流程图
-├── tests/                # 单元测试目录
-│   ├── __init__.py
-│   ├── test_perception.py
-│   ├── test_world_model.py
-│   ├── test_decision.py
-│   └── test_execution.py
-└── main.py               # 项目入口文件（整合各模块，启动日麻小助手）
+MahjongPaw/
+├── main.py                    # 项目入口（启动 GUI）
+├── api_gui.py                 # GUI 主界面（流式输出、聊天、Markdown 渲染）
+├── analyzer.py                # 牌局分析器（向听数、听牌、打点计算）
+├── api.py                     # 大模型 API 调用（DeepSeek）
+├── cal_scores.py              # 点数计算模块
+├── Mahjong_YOLO/              # YOLO 麻将牌识别模块
+│   ├── trained_models_v2/     # 训练好的 YOLO 模型权重
+│   │   ├── yolo11n_best.pt
+│   │   ├── yolo11s_best.pt
+│   │   └── yolo11m_best.pt
+│   ├── notebooks/             # 数据标注和处理
+├── world_model/               # 世界模型（麻将对象定义）
+│   ├── mahjong_table.py       # 麻将桌类
+│   ├── mahjong_player.py      # 玩家类
+│   ├── mahjong_tile.py        # 麻将牌类
+│   └── mahjong_meld.py        # 副露类
+├── models/                    # 模型文件目录
+│   └── yolov8_mahjong.pt      # YOLO 模型权重（备用）
+├── requirements.txt           # 项目依赖
+└── README.md                 # 项目说明文档
 ```
 
 ## Perception感知层
