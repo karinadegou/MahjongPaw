@@ -13,19 +13,17 @@ MahjongPaw/
 ├── cal_scores.py              # 点数计算模块
 ├── Mahjong_YOLO/              # YOLO 麻将牌识别模块
 │   ├── trained_models_v2/     # 训练好的 YOLO 模型权重
-│   │   ├── yolo11n_best.pt
-│   │   ├── yolo11s_best.pt
-│   │   └── yolo11m_best.pt
-│   ├── notebooks/             # 数据标注和处理
+│   │   ├── yolo11m_best.pt    # 默认使用的模型
+│   ├── test.py                # 识别逻辑实现
 ├── world_model/               # 世界模型（麻将对象定义）
 │   ├── mahjong_table.py       # 麻将桌类
 │   ├── mahjong_player.py      # 玩家类
 │   ├── mahjong_tile.py        # 麻将牌类
 │   └── mahjong_meld.py        # 副露类
-├── models/                    # 模型文件目录
-│   └── yolov8_mahjong.pt      # YOLO 模型权重（备用）
 ├── requirements.txt           # 项目依赖
-└── README.md                 # 项目说明文档
+├── README.md                  # 项目说明文档
+├── 演示文档.md                # 详细功能演示
+└── 安装部署运行说明.md        # 安装部署指南
 ```
 
 ## Perception感知层
