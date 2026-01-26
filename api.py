@@ -1,7 +1,5 @@
 # Please install OpenAI SDK first: `pip3 install openai`
 import os
-
-from langchain_experimental.llms.anthropic_functions import prompt
 from openai import OpenAI
 
 client = OpenAI(
